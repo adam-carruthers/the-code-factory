@@ -1,0 +1,20 @@
+.the-big-header {
+  background: url("./Blueprint.png") no-repeat center center fixed;
+  width: 100%;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.the-big-header h1 span {
+  display: block;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
