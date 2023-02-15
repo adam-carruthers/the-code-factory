@@ -50,3 +50,19 @@ test("update function is called with correct values", () => {
   expect(updateMock).toBeCalledWith(90, 100);
   updateMock.mockReset();
 });
+
+test("runEvent only executes at the correct time", () => {
+  const endMock = jest.fn();
+
+  const iit = new ItemInTransit(100, jest.fn(), endMock);
+
+  expect(() => iit.runEvent()).toThrowError(
+    "Event was run when the time left was not 0 (it was 100)"
+  );
+
+  iit.passTime(100);
+
+  iit.runEvent();
+
+  expect(endMock).toBeCalledTimes(1);
+});
