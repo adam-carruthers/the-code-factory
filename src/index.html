@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="./index.js"></script>
+    <script type="module" src="./index.ts"></script>
     <link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
     <link rel="stylesheet" href="./style.css" />
     <title>The Code Factory - An interactive web essay</title>
@@ -13,26 +13,28 @@
   <body>
     <header class="the-big-header">
       <div class="flex-grow-1"></div>
-      <h1>The Code Factory</h1>
-      <h2>
-        An interactive essay by
-        <a href="https://github.com/goodyguts">Adam Carruthers</a>
-      </h2>
-      <p>
-        Learn the counterintuitive trick to manage a software team from...
-        manufacturing?
-      </p>
+      <div class="container">
+        <h1>The Code Factory</h1>
+        <h2>
+          An interactive essay by
+          <a href="https://github.com/goodyguts">Adam Carruthers</a>
+        </h2>
+        <p>
+          Learn the counterintuitive trick to manage a software team from...
+          manufacturing?
+        </p>
+      </div>
       <div class="flex-grow-1"></div>
     </header>
 
-    <main>
+    <main class="container">
       <p>
         If you're a developer working for some company, you probably have
-        opinions about how your project is being managed. I'm similar. I work
-        for the NHS and it matters a lot that the work we do is successful -
-        what we do can change people's quality of life, it can even save lives.
-        I work on a NHS data system - this system is being used right now to
-        test whether drugs are safe and effective.
+        opinions about how your project is being managed. It's natural, we care
+        that our projects succeed. I work for the NHS and it matters a lot that
+        the work we do is successful - what we do can change people's quality of
+        life, it can even save lives. I work on a NHS data system - this system
+        is being used right now to test whether drugs are safe and effective.
         <u>My work might be making drugs safer.</u>
       </p>
       <p>
@@ -99,6 +101,7 @@
         stations and see how it changes the rate of production.
       </p>
       <!-- Constrained capacity sim -->
+      <div id="constrained-capacity-container"></div>
     </main>
   </body>
 </html>
