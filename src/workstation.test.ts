@@ -1,10 +1,10 @@
 import { expect, test, jest } from "@jest/globals";
 import Workstation from "./workstation";
 
-test("shows null for next event time without ongoing jobs", () => {
+test("shows Infinity for next event time without ongoing jobs", () => {
   const ws = new Workstation(10);
 
-  expect(ws.getNextEventTime()).toBe(null);
+  expect(ws.getNextEventTime()).toBe(Infinity);
 });
 
 test("allows infinite passing of time without ongoing job", () => {
@@ -75,7 +75,7 @@ test("end event after the correct amount of time has passed", () => {
 
   ws.runEvent();
 
-  expect(ws.getNextEventTime()).toBe(null);
+  expect(ws.getNextEventTime()).toBe(Infinity);
 });
 
 test("pass over to next item in wait list", () => {
@@ -97,7 +97,7 @@ test("pass over to next item in wait list", () => {
   ws.passTime(6);
   ws.runEvent();
 
-  expect(ws.getNextEventTime()).toEqual(null);
+  expect(ws.getNextEventTime()).toEqual(Infinity);
 });
 
 test("counts wait list correctly", () => {

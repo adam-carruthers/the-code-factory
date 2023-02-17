@@ -6,15 +6,17 @@ export default class Workstation {
   workTime: number;
   waitListCount: number;
   ongoingJob: null | { timeRemaining: number };
+  id: string;
 
-  constructor(workTime: number) {
+  constructor(workTime: number, workstationId: string = "NOTSET") {
     this.workTime = workTime;
     this.waitListCount = 0;
     this.ongoingJob = null;
+    this.id = workstationId;
   }
 
   getNextEventTime = () => {
-    return this.ongoingJob?.timeRemaining ?? null;
+    return this.ongoingJob?.timeRemaining ?? Infinity;
   };
 
   passTime = (dt: number) => {
