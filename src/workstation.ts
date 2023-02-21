@@ -46,7 +46,7 @@ export default class Workstation {
     if (!this.ongoingJob) this.#startOngoingJob();
   };
 
-  runEvent = () => {
+  runItemFinishesProcesssingEvent = () => {
     if (!this.ongoingJob)
       throw new Error(
         "Tried to run event in workstation without an ongoing job."

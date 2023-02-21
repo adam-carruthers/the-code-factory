@@ -35,11 +35,11 @@ test("doesn't error on passing exactly the right amount of time", () => {
 test("runEvent only executes at the correct time", () => {
   const iit = new ItemInTransit(100);
 
-  expect(() => iit.runEvent()).toThrowError(
+  expect(() => iit.runTransitEndsEvent()).toThrowError(
     "Event was run when the time left was not 0 (it was 100)"
   );
 
   iit.passTime(100);
 
-  iit.runEvent();
+  iit.runTransitEndsEvent();
 });

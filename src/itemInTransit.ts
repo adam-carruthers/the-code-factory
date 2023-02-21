@@ -1,12 +1,10 @@
 export default class ItemInTransit {
   timeToDestination: number;
   timeLeft: number;
-  link?: string;
 
   constructor(timeToDestination: number, link?: string) {
     this.timeToDestination = timeToDestination;
     this.timeLeft = timeToDestination;
-    this.link = link;
   }
 
   getNextEventTime = () => {
@@ -22,7 +20,7 @@ export default class ItemInTransit {
     this.timeLeft -= dt;
   };
 
-  runEvent = () => {
+  runTransitEndsEvent = () => {
     if (this.timeLeft !== 0)
       throw new Error(
         `Event was run when the time left was not 0 (it was ${this.timeLeft})`

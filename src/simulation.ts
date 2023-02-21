@@ -1,89 +1,62 @@
 import ItemInTransit from "./itemInTransit";
+import Pipe from "./pipe";
 import Workstation from "./workstation";
 
-export type WorkstationMap = { [workspaceKey: string]: Workstation };
-type SimElement = ItemInTransit | Workstation;
-
-export const TRAVEL_TIME = 5000;
-
-const linkPartIdNotInSet = (links: string[], validIds: Set<string>) =>
-  links.some((link) =>
-    link.split("-").some((linkPartId) => !validIds.has(linkPartId))
-  );
+type SimElement = Pipe | Workstation;
 
 export default class Simulation {
-  workstationMap: WorkstationMap;
-  itemsInTransit: { [link: string]: ItemInTransit[] };
-  workstationToLink: { [workstationId: string]: string };
+  workstationById: { [workspaceKey: string]: Workstation };
+  pipeById: { [pipeId: string]: Pipe };
+  pipeBySourceWorkspaceId: { [workspaceId: string]: Pipe };
   nextEventTime: number;
+  simElements: SimElement[];
 
-  constructor(workstations: Workstation[], links: string[]) {
-    if (links.some((link) => (link.match(/-/g) || []).length !== 1))
-      throw new Error("Links must have one and exactly one dash symbol");
-
-    const workstationIds = workstations.map((ws) => ws.id);
-
-    if (
-      workstationIds.indexOf("start") !== -1 ||
-      workstationIds.indexOf("end") !== -1
-    )
-      throw new Error(
-        "workstation ids must not contain the words 'start' or 'end'"
-      );
-
-    if (linkPartIdNotInSet(links, new Set([...workstationIds, "start", "end"])))
-      throw new Error(
-        "Link part must be in workstation ids or be 'start' or 'end'"
-      );
-
-    this.workstationToLink = Object.fromEntries(
-      links.map((link) => [link.split("-")[0], link])
-    );
-    this.workstationMap = Object.fromEntries(
+  constructor(workstations: Workstation[], pipes: Pipe[]) {
+    this.workstationById = Object.fromEntries(
       workstations.map((ws) => [ws.id, ws])
     );
-    this.itemsInTransit = Object.fromEntries(links.map((link) => [link, []]));
+    this.pipeById = Object.fromEntries(pipes.map((pipe) => [pipe.id, pipe]));
+    this.pipeBySourceWorkspaceId = Object.fromEntries(
+      pipes
+        .filter((pipe) => pipe.fromWorkspaceId !== null)
+        .map((pipe) => [pipe.fromWorkspaceId, pipe])
+    );
+    this.simElements = [...workstations, ...pipes];
     this.updateNextEventTime();
   }
 
   updateNextEventTime = () => {
     // All elements + master dt must be in sync at this point
-    this.nextEventTime = this.getNextSoonestEventTime();
+    this.nextEventTime = this.calcNextEventTime();
   };
 
-  getAllSimElements = (): SimElement[] => [
-    ...Object.values(this.workstationMap),
-    ...Object.values(this.itemsInTransit).flat(),
-  ];
-
-  getNextSoonestEventTime = () => {
+  calcNextEventTime = () => {
     // All elements + master dt must be in sync at this point
-    return Math.min(
-      ...this.getAllSimElements().map((el) => el.getNextEventTime())
-    );
+    return Math.min(...this.simElements.map((el) => el.getNextEventTime()));
   };
 
-  addItemToLink = (link: string) => {
+  addItemToPipe = (pipeId: string) => {
     // All elements + master dt must be in sync at this point
-    const iit = new ItemInTransit(TRAVEL_TIME, link);
-    this.itemsInTransit[link].push(iit);
-    const iitNextEvtTime = iit.getNextEventTime();
-    if (iitNextEvtTime < this.nextEventTime)
-      this.nextEventTime = iitNextEvtTime;
+    this.pipeById[pipeId].addItem();
+    const pipeNextEventTime = this.pipeById[pipeId].getNextEventTime();
+    if (pipeNextEventTime < this.nextEventTime)
+      this.nextEventTime = pipeNextEventTime;
   };
 
   addItemToWorkstation = (workstationId: string) => {
     // All elements + master dt must be in sync at this point
-    this.workstationMap[workstationId].receiveItem();
-    const wsNextEvtTime = this.workstationMap[workstationId].getNextEventTime();
+    this.workstationById[workstationId].receiveItem();
+    const wsNextEvtTime =
+      this.workstationById[workstationId].getNextEventTime();
     if (wsNextEvtTime < this.nextEventTime) this.nextEventTime = wsNextEvtTime;
   };
 
   #passEventlessTime = (dt: number) => {
-    if (dt <= 0) throw new Error("dt <= 0");
+    if (dt === 0) return;
+    if (dt < 0) throw new Error("dt < 0");
     if (dt > this.nextEventTime)
       throw new Error("Tried to pass more time than the next event Simulation");
-    this.getAllSimElements().forEach((el) => el.passTime(dt));
+    this.simElements.forEach((el) => el.passTime(dt));
     this.nextEventTime -= dt;
   };
 
@@ -97,13 +70,6 @@ export default class Simulation {
     if (dt < this.nextEventTime) return this.#passEventlessTime(dt);
 
     while (dt >= this.nextEventTime) {
-      if (this.nextEventTime <= 0)
-        throw new Error(
-          "At start of simulation passTime loop nextEventTime <= 0"
-        );
-      if (dt <= 0)
-        throw new Error("At start of simulation passTime loop dt <= 0");
-
       dt -= this.nextEventTime;
       this.#passEventlessTime(this.nextEventTime);
 
@@ -112,34 +78,28 @@ export default class Simulation {
       this.updateNextEventTime();
     }
 
-    if (dt > 0) this.#passEventlessTime(dt);
+    this.#passEventlessTime(dt);
   };
 
   performAllCurrentEvents = () => {
-    this.getAllSimElements()
+    this.simElements
       .filter((em) => em.getNextEventTime() === 0)
       .map(this.performEventOnSimElement);
   };
 
   performEventOnSimElement = (el: SimElement) => {
-    el.runEvent();
-    if (el instanceof ItemInTransit) {
-      if (!el.link) throw new Error("ItemInTransit missing link property");
+    if (el instanceof Pipe) {
+      el.runItemLeavesPipeEvent();
 
-      // Get it out of the list
-      this.itemsInTransit[el.link] = this.itemsInTransit[el.link].filter(
-        (iit) => iit !== el
-      );
+      if (el.toWorkspaceId === null) return;
 
-      const destWorkstationId = el.link.split("-")[1];
-
-      if (destWorkstationId == "end") return;
-
-      this.addItemToWorkstation(destWorkstationId);
+      this.addItemToWorkstation(el.toWorkspaceId);
     } else {
-      const toLink = this.workstationToLink[el.id];
+      el.runItemFinishesProcesssingEvent();
 
-      this.addItemToLink(toLink);
+      const toPipe = this.pipeBySourceWorkspaceId[el.id];
+
+      this.addItemToPipe(toPipe.id);
     }
   };
 }

@@ -50,7 +50,7 @@ test("receiving item with nothing going on goes into wait list", () => {
 test("doesn't allow running event without ongoing job", () => {
   const ws = new Workstation(3);
 
-  expect(() => ws.runEvent()).toThrowError(
+  expect(() => ws.runItemFinishesProcesssingEvent()).toThrowError(
     "Tried to run event in workstation without an ongoing job."
   );
 });
@@ -60,7 +60,7 @@ test("doesn't allow running event with time remaining", () => {
 
   ws.receiveItem();
 
-  expect(() => ws.runEvent()).toThrowError(
+  expect(() => ws.runItemFinishesProcesssingEvent()).toThrowError(
     "Tried to run event in workstation when time left was not 0"
   );
 });
@@ -73,7 +73,7 @@ test("end event after the correct amount of time has passed", () => {
   ws.passTime(3);
   ws.passTime(3);
 
-  ws.runEvent();
+  ws.runItemFinishesProcesssingEvent();
 
   expect(ws.getNextEventTime()).toBe(Infinity);
 });
@@ -89,13 +89,13 @@ test("pass over to next item in wait list", () => {
 
   ws.passTime(3);
 
-  ws.runEvent();
+  ws.runItemFinishesProcesssingEvent();
 
   expect(ws.getNextEventTime()).toEqual(6);
   expect(ws.waitListCount).toEqual(0);
 
   ws.passTime(6);
-  ws.runEvent();
+  ws.runItemFinishesProcesssingEvent();
 
   expect(ws.getNextEventTime()).toEqual(Infinity);
 });
