@@ -2,11 +2,7 @@ import { Ticker, Sprite, Container } from "pixi.js";
 import ItemInTransit from "./itemInTransit";
 import Pipe from "./pipe";
 import packageImg from "./package.png";
-
-interface Coords {
-  x: number;
-  y: number;
-}
+import { Coords } from "./types";
 
 export default class PipeUI {
   simPipe: Pipe;
