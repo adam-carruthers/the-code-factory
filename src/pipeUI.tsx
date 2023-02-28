@@ -1,27 +1,29 @@
-import { Ticker, Sprite, Container } from "pixi.js";
+import { Sprite, Container } from "pixi.js";
 import ItemInTransit from "./itemInTransit";
 import Pipe from "./pipe";
 import packageImg from "./package.png";
 import { Coords } from "./types";
+import MyTicker from "./ticker";
 
 export default class PipeUI {
   simPipe: Pipe;
   startCoords: Coords;
   endCoords: Coords;
-  ticker: Ticker;
+  ticker: MyTicker;
   container: Container;
 
   constructor(
     simPipe: Pipe,
     startCoords: Coords,
     endCoords: Coords,
-    ticker: Ticker,
-    container: Container
+    ticker: MyTicker,
+    parentContainer: Container
   ) {
     this.startCoords = startCoords;
     this.endCoords = endCoords;
     this.ticker = ticker;
-    this.container = container;
+    this.container = new Container();
+    parentContainer.addChild(this.container);
     this.simPipe = simPipe;
     simPipe.registerCreateCb(this.createCb);
   }
@@ -30,6 +32,7 @@ export default class PipeUI {
     const box = Sprite.from(packageImg);
     box.x = this.startCoords.x;
     box.y = this.startCoords.y;
+    box.anchor.set(0.5);
 
     this.container.addChild(box);
 

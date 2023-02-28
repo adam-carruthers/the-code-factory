@@ -27,81 +27,84 @@
       <div class="flex-grow-1"></div>
     </header>
 
-    <main class="container">
-      <p>
-        If you're a developer working for some company, you probably have
-        opinions about how your project is being managed. It's natural, we care
-        that our projects succeed. I work for the NHS and it matters a lot that
-        the work we do is successful - what we do can change people's quality of
-        life, it can even save lives. I work on a NHS data system - this system
-        is being used right now to test whether drugs are safe and effective.
-        <u>My work might be making drugs safer.</u>
-      </p>
-      <p>
-        The success that we want is imperilled when the projects are managed
-        badly. You can throw infinite money at people doing IT but if the work
-        is done the wrong way, you might as well set that money on fire (see:
-        National Programme for IT). Let's fix that by treating IT like a
-        factory, and the work we produce just like products going down a
-        production line.
-      </p>
-      <p>
-        How is all this relevant? Is this all just an excuse to program a cool
-        graphic in JavaScript? The work of writing code is surely very different
-        to that of screwing on nuts and bolts to a car. I hope to convince you
-        bit by bit that the <b>systematic view</b> that factories use to
-        increase throughput is useful in programming as well.
-      </p>
-      <p>
-        Let's start thinking like a factory manager. A factory manager knows
-        that:
-      </p>
-      <!-- Maybe I could make this a regularly changing quote with JS -->
-      <blockquote>
-        We create something, ~thing, car?~.<br />
-        This thing has value, ~money or faster rides to work for customers~.<br />
-        This value is created by a <b>process</b>.
-      </blockquote>
-      <p>
-        A factory manager dedicates themselves to understanding how the process
-        creates the value, and then trying to modify the process to make sure it
-        gives the most value. Controversial idea I know.
-      </p>
-      <p>For us:</p>
-      <blockquote>
-        We create something, computer programs.<br />
-        This thing has value, ~money, lives saved, new research, social
-        connections to friends~.<br />
-        This value is also created by a <b>process</b>.
-      </blockquote>
-      <p>Let's start process analysing.</p>
-      <h2>Welcome to the factory</h2>
-      <!-- Factory simulation here -->
-      <!-- Box going through three stations -->
-      <p>
-        Here's a crude simulation of the process of making something. The
-        materials come in from the left, they then go through a series of
-        processing steps or <b>workstations</b> and then leave the building to
-        be shipped to happy customers on the right.
-      </p>
-      <p>
-        Click the buttons below to add labels to the process to show how it can
-        represent different processes.
-      </p>
-      <!-- Buttons for the labels -->
-      <p>
-        Each workstation has a few features. It needs a worker to man it, it
-        needs materials, it uses some machine. Each workstation can process work
-        at a certain speed. Work waiting to be processed sits in a waiting area
-        before the workstation.
-      </p>
-      <p>
-        Look at the factory below, in two of the workstations you can add and
-        remove processing capacity. Try changing the capacity a bit in the two
-        stations and see how it changes the rate of production.
-      </p>
+    <main>
+      <div class="container">
+        <p>
+          If you're a developer working for some company, you probably have
+          opinions about how your project is being managed. It's natural, we care
+          that our projects succeed. I work for the NHS and it matters a lot that
+          the work we do is successful - what we do can change people's quality of
+          life, it can even save lives. I work on a NHS data system - this system
+          is being used right now to test whether drugs are safe and effective.
+          <u>My work might be making drugs safer.</u>
+        </p>
+        <p>
+          The success that we want is imperilled when the projects are managed
+          badly. You can throw infinite money at people doing IT but if the work
+          is done the wrong way, you might as well set that money on fire (see:
+          National Programme for IT). Let's fix that by treating IT like a
+          factory, and the work we produce just like products going down a
+          production line.
+        </p>
+        <p>
+          How is all this relevant? Is this all just an excuse to program a cool
+          graphic in JavaScript? The work of writing code is surely very different
+          to that of screwing on nuts and bolts to a car. I hope to convince you
+          bit by bit that the <b>systematic view</b> that factories use to
+          increase throughput is useful in programming as well.
+        </p>
+        <p>
+          Let's start thinking like a factory manager. A factory manager knows
+          that:
+        </p>
+        <!-- Maybe I could make this a regularly changing quote with JS -->
+        <blockquote>
+          We create something, ~thing, car?~.<br />
+          This thing has value, ~money or faster rides to work for customers~.<br />
+          This value is created by a <b>process</b>.
+        </blockquote>
+        <p>
+          A factory manager dedicates themselves to understanding how the process
+          creates the value, and then trying to modify the process to make sure it
+          gives the most value. Controversial idea I know.
+        </p>
+        <p>For us:</p>
+        <blockquote>
+          We create something, computer programs.<br />
+          This thing has value, ~money, lives saved, new research, social
+          connections to friends~.<br />
+          This value is also created by a <b>process</b>.
+        </blockquote>
+        <p>Let's start process analysing.</p>
+        <h2>Welcome to the factory</h2>
+        <!-- Factory simulation here -->
+        <!-- Box going through three stations -->
+        <p>
+          Here's a crude simulation of the process of making something. The
+          materials come in from the left, they then go through a series of
+          processing steps or <b>workstations</b> and then leave the building to
+          be shipped to happy customers on the right.
+        </p>
+        <p>
+          Click the buttons below to add labels to the process to show how it can
+          represent different processes.
+        </p>
+        <!-- Buttons for the labels -->
+        <p>
+          Each workstation has a few features. It needs a worker to man it, it
+          needs materials, it uses some machine. Each workstation can process work
+          at a certain speed. Work waiting to be processed sits in a waiting area
+          before the workstation.
+        </p>
+        <p>
+          Look at the factory below, in two of the workstations you can add and
+          remove processing capacity. Try changing the capacity a bit in the two
+          stations and see how it changes the rate of production.
+        </p>
+      </div>
       <!-- Constrained capacity sim -->
       <div id="constrained-capacity-container"></div>
+      <div style="height: 100px"></div>
     </main>
   </body>
 </html>

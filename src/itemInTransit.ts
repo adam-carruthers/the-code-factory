@@ -2,7 +2,7 @@ export default class ItemInTransit {
   timeToDestination: number;
   timeLeft: number;
 
-  constructor(timeToDestination: number, link?: string) {
+  constructor(timeToDestination: number) {
     this.timeToDestination = timeToDestination;
     this.timeLeft = timeToDestination;
   }
