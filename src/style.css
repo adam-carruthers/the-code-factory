@@ -41,13 +41,12 @@ body {
   }
 }
 
-#constrained-capacity-container {
+.sim-container {
   width: 100%;
   background-color: #ddd;
 }
 
-
-#constrained-capacity-container canvas {
+.sim-container canvas {
   display: block;
   margin-left: auto;
   margin-right: auto;

@@ -89,7 +89,16 @@
           Click the buttons below to add labels to the process to show how it can
           represent different processes.
         </p>
-        <!-- Buttons for the labels -->
+        <div style="margin-bottom: 20px;">
+          <button id="button-sofa-factory">Sofa factory 🛋️</button>
+          <button id="button-software-development">Software development 💻</button>
+          <button id="button-plumbus">Plumbus 🪠</button>
+          <button id="button-clear-labels">Clear ✖️</button>
+        </div>
+      </div>
+      <!-- Constrained capacity sim -->
+      <div id="labels-sim" class="sim-container"></div>
+      <div class="container">
         <p>
           Each workstation has a few features. It needs a worker to man it, it
           needs materials, it uses some machine. Each workstation can process work
@@ -102,8 +111,7 @@
           stations and see how it changes the rate of production.
         </p>
       </div>
-      <!-- Constrained capacity sim -->
-      <div id="constrained-capacity-container"></div>
+      <div id="constrained-capacity-sim" class="sim-container"></div>
       <div style="height: 100px"></div>
     </main>
   </body>

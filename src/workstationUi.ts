@@ -1,4 +1,11 @@
-import { BitmapFont, BitmapText, Container, Sprite, TextStyle } from "pixi.js";
+import {
+  BitmapFont,
+  BitmapText,
+  Container,
+  Graphics,
+  Sprite,
+  TextStyle,
+} from "pixi.js";
 import { Coords } from "./types";
 import Workstation from "./workstation";
 import waitingArea from "./waitingArea.png";
@@ -11,6 +18,7 @@ export default class WorkstationUI {
   waitingAreaSprite: Sprite;
   mainAreaSprite: Sprite;
   waitingCount: BitmapText;
+  completionBar: Graphics;
 
   constructor(
     workstation: Workstation,
@@ -38,15 +46,42 @@ export default class WorkstationUI {
       align: "center",
     });
     this.waitingCount.y = 30;
-    this.waitingCount.x = -this.waitingCount.textWidth / 2;
+    this.waitingCount.anchor.set(0.5, 0);
+    this.updateWaitingCount();
     this.container.addChild(this.waitingCount);
+
+    this.completionBar = new Graphics();
+    this.completionBar.x = 30;
+    this.completionBar.y = 65;
+    this.updateCompletionBar();
+    this.container.addChild(this.completionBar);
 
     ticker.add(this.tick);
     this.tick();
   }
 
   tick = () => {
+    this.updateWaitingCount();
+    this.updateCompletionBar();
+  };
+
+  updateWaitingCount = () => {
     this.waitingCount.text = `${this.workstation.waitListCount}`;
-    this.waitingCount.x = -this.waitingCount.textWidth / 2;
+  };
+
+  updateCompletionBar = () => {
+    this.completionBar.clear();
+    if (this.workstation.getNextEventTime() === Infinity) return;
+    this.completionBar.beginFill(0xff0000);
+    this.completionBar.drawRect(0, 0, 100, 5);
+    this.completionBar.endFill();
+    this.completionBar.beginFill(0x00ff00);
+    this.completionBar.drawRect(
+      0,
+      0,
+      (100 * this.workstation.getNextEventTime()) / this.workstation.workTime,
+      5
+    );
+    this.completionBar.endFill();
   };
 }
